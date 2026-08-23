@@ -76,4 +76,4 @@ if(form){
   };
 }
 
-if($('cpu')){refresh();setInterval(refresh,3000);}
+if($('cpu')){refresh();setInterval(refresh,525);}
