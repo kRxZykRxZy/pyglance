@@ -1,0 +1,15 @@
+[Unit]
+Description=Lightweight Pi Monitor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/pi-monitor
+Restart=always
+RestartSec=2
+User=root
+NoNewPrivileges=false
+
+[Install]
+WantedBy=multi-user.target
