@@ -1,6 +1,3 @@
-cd /mnt/drive/pyglance
-
-cat > pi_monitor.c <<'EOF'
 #define _GNU_SOURCE
 
 #include <arpa/inet.h>
@@ -558,4 +555,3 @@ int main(void) {
     close(server);
     return 0;
 }
-EOF
