@@ -6,7 +6,6 @@ SOURCES := src/main.c src/http.c src/system.c
 OBJECTS := $(SOURCES:.c=.o)
 
 .PHONY: all clean install
-
 all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
@@ -24,3 +23,5 @@ install: $(TARGET)
 	install -Dm644 web/dashboard.html /usr/share/pi-monitor/web/dashboard.html
 	install -Dm644 web/app.css /usr/share/pi-monitor/web/app.css
 	install -Dm644 web/app.js /usr/share/pi-monitor/web/app.js
+	install -Dm644 pi-monitor.service /etc/systemd/system/pi-monitor.service
+	systemctl daemon-reload
