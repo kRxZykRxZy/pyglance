@@ -1436,56 +1436,50 @@ static const char html[] =
 
 "let refreshing=false;"
 
-"function login(){"
+"document.getElementById('loginForm').addEventListener('submit', async function(e){"
 
-"let username="
-"document.getElementById('username').value;"
+"e.preventDefault();"
 
-"let password="
-"document.getElementById('password').value;"
+"const error=document.getElementById('error');"
+"error.textContent='';"
 
-"let body="
-"'username='+encodeURIComponent(username)+"
-"'&password='+encodeURIComponent(password);"
+"const username=document.getElementById('username').value;"
+"const password=document.getElementById('password').value;"
 
-"fetch('/api/login',{"
+"try{"
+
+"const response=await fetch('/api/login',{"
 "method:'POST',"
 "headers:{"
-"'Content-Type':"
-"'application/x-www-form-urlencoded'"
+"'Content-Type':'application/x-www-form-urlencoded'"
 "},"
-"body:body"
-"})"
+"body:new URLSearchParams({"
+"username:username,"
+"password:password"
+"}).toString(),"
+"credentials:'same-origin'"
+"});"
 
-".then(r=>r.json())"
+"const data=await response.json();"
 
-".then(data=>{"
-
-"if(!data.ok)"
-"throw new Error('login');"
+"if(!response.ok || !data.ok){"
+"error.textContent=data.error||'Invalid username or password';"
+"return;"
+"}"
 
 "document.getElementById('login').style.display='none';"
-
 "document.getElementById('app').style.display='block';"
 
 "refresh();"
 
-"})"
+"}catch(err){"
 
-".catch(()=>{"
-
-"document.getElementById('error').textContent="
-"'Invalid username or password';"
-
-"});"
+"error.textContent='Unable to connect to Pi Monitor';"
 
 "}"
 
-
-"document.getElementById('password').addEventListener("
-"'keydown',function(e){"
-"if(e.key==='Enter')login();"
 "});"
+
 
 
 "function api(url,options={}){"
