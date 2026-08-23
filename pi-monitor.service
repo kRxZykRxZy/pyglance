@@ -9,7 +9,7 @@ ExecStart=/usr/local/bin/pi-monitor
 Restart=always
 RestartSec=2
 User=root
-NoNewPrivileges=false
+WorkingDirectory=/usr/share/pi-monitor
 
 [Install]
 WantedBy=multi-user.target
