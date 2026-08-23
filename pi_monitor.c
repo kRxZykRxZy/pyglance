@@ -1739,19 +1739,12 @@ static void serve_html(
    HTTP request handler
    ========================================================= */
 
-static void handle_client(
-    int fd
-)
+static void handle_client(int fd)
 {
     char request[REQUEST_SIZE];
 
     ssize_t received =
-        recv(
-            fd,
-            request,
-            sizeof(request) - 1,
-            0
-        );
+        recv(fd, request, sizeof(request) - 1, 0);
 
     if (received <= 0)
         return;
@@ -1761,14 +1754,7 @@ static void handle_client(
     char method[16];
     char path[2048];
 
-    if (
-        sscanf(
-            request,
-            "%15s %2047s",
-            method,
-            path
-        ) != 2
-    )
+    if (sscanf(request, "%15s %2047s", method, path) != 2)
     {
         send_response(
             fd,
@@ -1776,118 +1762,76 @@ static void handle_client(
             "text/plain",
             "Bad request"
         );
-
         return;
     }
-
 
     /*
-     * LOGIN
-     *
-     * This endpoint is intentionally
-     * unauthenticated.
+     * IMPORTANT:
+     * The main HTML page is public.
+     * This is what displays the HTML login screen.
      */
-
-    if (
-        strcmp(path, "/api/login") == 0 &&
-        strcmp(method, "POST") == 0
-    )
-    {
-        api_login(
-            fd,
-            request
-        );
-
-        return;
-    }
-
-
-    /*
-     * Everything else requires
-     * the HTML session cookie.
-     */
-
-    if (!valid_session(request))
-    {
-        /*
-         * IMPORTANT:
-         *
-         * Do NOT send:
-         *
-         * WWW-Authenticate
-         *
-         * Otherwise Chrome would show
-         * its browser login popup.
-         */
-
-        send_json(
-            fd,
-            "401 Unauthorized",
-            "{\"error\":\"login required\"}"
-        );
-
-        return;
-    }
-
-
-    if (
-        strcmp(path, "/") == 0
-    )
+    if (strcmp(path, "/") == 0 &&
+        strcmp(method, "GET") == 0)
     {
         serve_html(fd);
         return;
     }
 
+    /*
+     * Login is also public.
+     * The browser submits the HTML form here.
+     */
+    if (strcmp(path, "/api/login") == 0 &&
+        strcmp(method, "POST") == 0)
+    {
+        api_login(fd, request);
+        return;
+    }
 
-    if (
-        strcmp(path, "/api/status") == 0
-    )
+    /*
+     * Everything below this point requires
+     * our cookie-based HTML login session.
+     */
+    if (!valid_session(request))
+    {
+        /*
+         * DO NOT send WWW-Authenticate.
+         * Otherwise Chrome displays its own
+         * username/password popup.
+         */
+        send_json(
+            fd,
+            "401 Unauthorized",
+            "{\"error\":\"login required\"}"
+        );
+        return;
+    }
+
+    if (strcmp(path, "/api/status") == 0)
     {
         update_cpu();
-
         api_status(fd);
-
         return;
     }
 
-
-    if (
-        strcmp(path, "/api/processes") == 0
-    )
+    if (strcmp(path, "/api/processes") == 0)
     {
         api_processes(fd);
-
         return;
     }
 
-
-    if (
-        strcmp(path, "/api/ports") == 0
-    )
+    if (strcmp(path, "/api/ports") == 0)
     {
         api_ports(fd);
-
         return;
     }
 
-
-    if (
-        strncmp(
-            path,
-            "/api/signal?",
-            12
-        ) == 0 &&
-        strcmp(method, "POST") == 0
-    )
+    if (strncmp(path, "/api/signal?", 12) == 0 &&
+        strcmp(method, "POST") == 0)
     {
-        api_signal(
-            fd,
-            path
-        );
-
+        api_signal(fd, path);
         return;
     }
-
 
     send_json(
         fd,
