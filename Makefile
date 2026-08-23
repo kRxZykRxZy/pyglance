@@ -20,6 +20,7 @@ clean:
 install: $(TARGET)
 	install -Dm755 $(TARGET) /usr/local/bin/$(TARGET)
 	install -d /usr/share/pi-monitor/web
+	install -Dm644 web/login.html /usr/share/pi-monitor/web/login.html
 	install -Dm644 web/dashboard.html /usr/share/pi-monitor/web/dashboard.html
 	install -Dm644 web/app.css /usr/share/pi-monitor/web/app.css
 	install -Dm644 web/app.js /usr/share/pi-monitor/web/app.js
