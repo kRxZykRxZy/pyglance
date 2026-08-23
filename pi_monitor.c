@@ -1275,18 +1275,26 @@ static const char html[] =
 
 "<p>Administrator login</p>"
 
+"<form id='loginForm'>"
+
 "<input"
 "id='username'"
+"name='username'"
 "placeholder='Username'"
-"autocomplete='username'>"
+"autocomplete='username'"
+"required>"
 
 "<input"
 "id='password'"
+"name='password'"
 "type='password'"
 "placeholder='Password'"
-"autocomplete='current-password'>"
+"autocomplete='current-password'"
+"required>"
 
-"<button onclick='login()'>Sign in</button>"
+"<button type='submit'>Sign in</button>"
+
+"</form>"
 
 "<div id='error' class='error'></div>"
 
