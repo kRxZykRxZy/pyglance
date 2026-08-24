@@ -2,7 +2,7 @@ CC ?= gcc
 CFLAGS ?= -O2 -Wall -Wextra -Wshadow -Wformat=2 -D_GNU_SOURCE
 LDFLAGS ?= -s
 TARGET := pi-monitor
-SOURCES := src/main.c src/http.c src/system.c
+SOURCES := src/main.c src/http.c src/system.c src/cpu.c src/firewall.c
 OBJECTS := $(SOURCES:.c=.o)
 
 .PHONY: all clean install
