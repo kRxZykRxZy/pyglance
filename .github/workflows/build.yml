@@ -1,0 +1,27 @@
+name: PyGlance build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - name: amd64
+            image: ubuntu:24.04
+          - name: armv7
+            image: arm32v7/debian:bookworm
+    runs-on: ubuntu-latest
+    container: ${{ matrix.image }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build tools
+        run: |
+          apt-get update
+          DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential
+      - name: Build
+        run: make clean all
+      - name: Verify binary
+        run: file pi-monitor && test -x pi-monitor
