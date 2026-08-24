@@ -11,6 +11,7 @@ void network_json(char *out, size_t out_size);
 void services_json(char *out, size_t out_size);
 void memory_json(char *out, size_t out_size);
 void cpu_json(char *out, size_t out_size);
+void cpu_cores_json(char *out, size_t out_size);
 void system_info_json(char *out, size_t out_size);
 int process_signal(int pid, int sig);
 #endif
