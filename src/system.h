@@ -6,6 +6,7 @@
 void system_status_json(char *out, size_t out_size);
 void processes_json(char *out, size_t out_size);
 void ports_json(char *out, size_t out_size);
+void logs_json(char *out, size_t out_size);
 int process_signal(int pid, int sig);
 
 #endif
